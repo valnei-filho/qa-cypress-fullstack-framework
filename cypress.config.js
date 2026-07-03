@@ -1,11 +1,19 @@
 const { defineConfig } = require("cypress");
 
 module.exports = defineConfig({
-  allowCypressEnv: false,
+  viewportWidth: 1366,
+  viewportHeight: 768,
+
+  defaultCommandTimeout: 10000,
+
+  video: true,
+
+  screenshotOnRunFailure: true,
 
   e2e: {
+    baseUrl: "https://opensource-demo.orangehrmlive.com",
+
     setupNodeEvents(on, config) {
-      // implement node event listeners here
     },
   },
 });
