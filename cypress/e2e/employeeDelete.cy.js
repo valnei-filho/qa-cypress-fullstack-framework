@@ -5,8 +5,8 @@ import PersonalDetailsPage from "../pages/PersonalDetailsPage";
 import EmployeeListPage from "../pages/EmployeeListPage";
 import { generateEmployee } from "../utils/generateEmployee";
 
-describe("Employee Feature", () => {
-  it("should create a new employee successfully", () => {
+describe("Employee Delete Feature", () => {
+  it("should delete employee successfully", () => {
     const employee = generateEmployee();
 
     cy.loginByUI();
@@ -21,23 +21,26 @@ describe("Employee Feature", () => {
 
     AddEmployeePage.clickSave();
 
-    cy.wait("@createEmployee").then(({ request, response }) => {
-      expect(request.method).to.eq("POST");
+    cy.wait("@createEmployee").then(({ response }) => {
       expect(response.statusCode).to.eq(200);
-
-      expect(request.body.firstName).to.eq(employee.firstName);
-      expect(request.body.lastName).to.eq(employee.lastName);
-
-      expect(response.body.data.firstName).to.eq(employee.firstName);
-      expect(response.body.data.lastName).to.eq(employee.lastName);
     });
 
-    PersonalDetailsPage.validateEmployee(employee);
+    PersonalDetailsPage.waitUntilLoaded();
 
     Sidebar.clickPim();
 
     EmployeeListPage.searchEmployee(employee.firstName);
 
     EmployeeListPage.validateEmployeeInTable(employee.firstName);
+
+    EmployeeListPage.clickDeleteIcon();
+
+    EmployeeListPage.confirmDelete();
+
+    EmployeeListPage.waitDeleteSuccess();
+
+    EmployeeListPage.searchEmployee(employee.firstName);
+
+    EmployeeListPage.validateEmployeeNotInTable();
   });
 });
