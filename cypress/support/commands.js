@@ -1,12 +1,10 @@
-import LoginPage from '../pages/LoginPage';
-import DashboardPage from '../pages/DashboardPage';
+import LoginPage from "../pages/LoginPage";
+import DashboardPage from "../pages/DashboardPage";
 
-Cypress.Commands.add('loginByUI', () => {
+Cypress.Commands.add("loginByUI", () => {
+  cy.visit("/");
 
-    cy.visit('/');
+  LoginPage.login("Admin", "admin123");
 
-    LoginPage.login('Admin', 'admin123');
-
-    DashboardPage.validateDashboardLoaded();
-
+  DashboardPage.validateDashboardLoaded();
 });

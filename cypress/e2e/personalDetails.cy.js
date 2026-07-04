@@ -1,26 +1,20 @@
 import Sidebar from "../components/Sidebar";
-import PimPage from "../pages/PimPage";
-import AddEmployeePage from "../pages/AddEmployeePage";
+import EmployeeActions from "../actions/employeeActions";
 import PersonalDetailsPage from "../pages/PersonalDetailsPage";
 import { generateEmployee } from "../utils/generateEmployee";
 
 describe("Personal Details Feature", () => {
+  beforeEach(() => {
+    cy.loginByUI();
+    Sidebar.clickPim();
+  });
+
   it("should update employee first name successfully", () => {
     const employee = generateEmployee();
 
     const updatedFirstName = `Updated${Date.now()}`;
 
-    cy.loginByUI();
-
-    Sidebar.clickPim();
-
-    PimPage.clickAddEmployee();
-
-    AddEmployeePage.fillEmployeeForm(employee);
-
-    AddEmployeePage.clickSave();
-
-    PersonalDetailsPage.waitUntilLoaded();
+    EmployeeActions.create(employee);
 
     cy.intercept("PUT", "**/api/v2/pim/employees/*/personal-details").as(
       "updateEmployee",
